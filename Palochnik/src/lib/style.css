@@ -1,0 +1,67 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.container {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.upload-area {
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.upload-area:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+.btn {
+  background: #fff;
+  color: #764ba2;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.download-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+.file-item {
+  background: rgba(255, 255, 255, 0.1);
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
