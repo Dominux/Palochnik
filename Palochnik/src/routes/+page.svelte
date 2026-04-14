@@ -1,10 +1,12 @@
 <script>
+  import { passwordVault } from '$lib/passwordvault.svelte'
+
   // Svelte 5 syntax
   let mode = $state('encode')
-  let password = $state('')
   let file = $state(null)
   let processing = $state(false)
   let isDragging = $state(false)
+  let showPassword = $state(false)
 
   const setMode = (val) => (mode = val)
 
@@ -39,7 +41,7 @@
 
   // Configuration for security
   const ALGO = 'AES-GCM'
-  const SALT = new TextEncoder().encode('static-salt-change-this') // In a real app, use a random salt per file
+  const SALT = new TextEncoder().encode("static-salt-change-this-ebal-mat'") // In a real app, use a random salt per file
 
   async function deriveKey(pass, usage) {
     const enc = new TextEncoder()
@@ -60,7 +62,7 @@
   }
 
   async function handleAction() {
-    if (!file || !password)
+    if (!file || !passwordVault.value)
       return alert('Please select a file and enter a password')
     processing = true
 
@@ -68,7 +70,7 @@
       const fileData = await file.arrayBuffer()
 
       if (mode === 'encode') {
-        const key = await deriveKey(password, 'encrypt')
+        const key = await deriveKey(passwordVault.value, 'encrypt')
         const iv = crypto.getRandomValues(new Uint8Array(12)) // 12 bytes is standard for GCM
         const encrypted = await crypto.subtle.encrypt(
           { name: ALGO, iv },
@@ -82,7 +84,7 @@
         })
         download(blob, file.name + '.enc')
       } else {
-        const key = await deriveKey(password, 'decrypt')
+        const key = await deriveKey(passwordVault.value, 'decrypt')
         const iv = fileData.slice(0, 12)
         const data = fileData.slice(12)
 
@@ -110,7 +112,7 @@
 </script>
 
 <main class="glass-card">
-  <h2>Vault.js</h2>
+  <h2>Palochnik</h2>
   <div class="tabs">
     <button
       type="button"
@@ -154,12 +156,24 @@
       {/if}
     </div>
 
-    <input
-      type="password"
-      bind:value={password}
-      placeholder="Secret Key"
-      class="pass-input"
-    />
+    <div class="password-wrapper">
+      <input
+        type={showPassword ? 'text' : 'password'}
+        bind:value={passwordVault.value}
+        placeholder="Secret Key"
+        class="pass-input"
+      />
+
+      <button
+        type="button"
+        class="eye-btn"
+        onclick={() => (showPassword = !showPassword)}
+        aria-label="Toggle password visibility"
+      >
+        <!-- Используем простые эмодзи или иконки -->
+        {showPassword ? '👁️' : '🙈'}
+      </button>
+    </div>
 
     <button class="action-btn" onclick={handleAction} disabled={processing}>
       {processing
@@ -261,15 +275,42 @@
     color: #94a3b8;
     word-break: break-all;
   }
+  .password-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
   .pass-input {
     width: 100%;
     padding: 12px;
+    padding-right: 45px; /* Место для кнопки */
     border-radius: 12px;
     border: 1px solid #334155;
     background: #1e293b;
     color: white;
-    margin-bottom: 20px;
     box-sizing: border-box;
+  }
+
+  .eye-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(1); /* Чтобы эмодзи не были слишком яркими */
+    transition: transform 0.1s;
+  }
+
+  .eye-btn:active {
+    transform: translateY(-50%) scale(0.9);
   }
   .action-btn {
     width: 100%;
