@@ -1,5 +1,6 @@
 <script>
   import { passwordVault } from '$lib/passwordvault.svelte'
+  import { ENC_FILE_FORMAT } from '$lib/index'
 
   // Svelte 5 syntax
   let mode = $state('encode')
@@ -34,8 +35,7 @@
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       file = e.dataTransfer.files[0]
-      // Optional: auto-switch mode if it's an .enc file
-      if (file.name.endsWith('.enc')) mode = 'decode'
+      if (file.name.endsWith(ENC_FILE_FORMAT)) mode = 'decode'
     }
   }
 
@@ -82,7 +82,7 @@
         const blob = new Blob([iv, encrypted], {
           type: 'application/octet-stream',
         })
-        download(blob, file.name + '.enc')
+        download(blob, file.name + ENC_FILE_FORMAT)
       } else {
         const key = await deriveKey(passwordVault.value, 'decrypt')
         const iv = fileData.slice(0, 12)
@@ -94,7 +94,7 @@
           data,
         )
         const blob = new Blob([decrypted], { type: 'application/octet-stream' })
-        download(blob, file.name.replace('.enc', ''))
+        download(blob, file.name.replace(ENC_FILE_FORMAT, ''))
       }
     } catch (e) {
       alert('Error: Likely a wrong password or corrupted file.')
