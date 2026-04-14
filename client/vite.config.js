@@ -6,11 +6,14 @@ export default defineConfig({
   plugins: [
     sveltekit(),
     SvelteKitPWA({
+      base: '/Palochnik/', // Match your repo name
       devOptions: {
         enabled: true,
         type: 'module', // Better for modern browsers/Vite
       },
       manifest: {
+        start_url: '/Palochnik/',
+        scope: '/Palochnik/',
         display: 'standalone', // MUST be standalone or fullscreen
         icons: [
           {
