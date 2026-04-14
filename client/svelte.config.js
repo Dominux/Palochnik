@@ -1,5 +1,7 @@
 import adapter from '@sveltejs/adapter-static'
 
+const dev = process.env.NODE_ENV === 'development'
+
 export default {
   kit: {
     adapter: adapter({
@@ -9,8 +11,9 @@ export default {
       register: false, // Let the Vite PWA plugin handle it
     },
     paths: {
-      base: process.env.NODE_ENV !== 'production' ? '' : '/Palochnik',
+      base: dev ? '' : '/Palochnik',
       relative: true, // Forces relative links for assets
     },
+    appDir: 'internal',
   },
 }
